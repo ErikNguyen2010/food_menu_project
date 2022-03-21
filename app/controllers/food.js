@@ -1,8 +1,10 @@
+import { Menu } from "../models/Menu.js";
 import { MonAn } from "../models/MonAn.js"
 import { DANH_SACH_MON_AN } from "../util/settings.js";
 
+let menu = new Menu();
+menu.layLocalStorage();
 
-let mangMonAn = [];
 document.querySelector('#btnThemMon').onclick = () =>{
     let monAn = new MonAn();
     let arrInput = document.querySelectorAll('#foodForm input, #foodForm select, #foodForm textarea');
@@ -43,6 +45,16 @@ document.querySelector('#btnThemMon').onclick = () =>{
                     </li>
                 `
             };break;
+            case "tinhGiaKhuyenMai":{
+                html += `
+                    <li id="giaKhuyenMai" class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">Giá khuyến mãi</h6>
+                        </div>
+                        <span id="spMa" class="text-muted">${monAn.tinhGiaKhuyenMai()}</span>
+                    </li>
+                `
+            };break;
             default: {
                 html += `
                     <li id="${key}" class="list-group-item d-flex justify-content-between lh-condensed">
@@ -56,28 +68,7 @@ document.querySelector('#btnThemMon').onclick = () =>{
 
         }
     }
-    html += `
-        <li id="giaKhuyenMai" class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-                <h6 class="my-0">Giá khuyến mãi</h6>
-            </div>
-            <span id="spMa" class="text-muted">${monAn.tinhGiaKhuyenMai()}</span>
-        </li>
-    `
     document.querySelector("#thongTinMonAn").innerHTML = html;
-    mangMonAn.push(monAn);
-    luuLocalStorage();
+    menu.themMonAn(monAn)
+    menu.luuLocalStorage();
 }
-function luuLocalStorage(){
-    let sMonAn = JSON.stringify(mangMonAn);
-    localStorage.setItem(DANH_SACH_MON_AN, sMonAn);
-}
-
-function layLocalStorage(){
-    if(localStorage.getItem(DANH_SACH_MON_AN)){
-        let sMonAn = localStorage.getItem(DANH_SACH_MON_AN);
-        let mangMonAn = JSON.parse(sMonAn);
-        console.log(mangMonAn);
-    }
-}
-layLocalStorage()
